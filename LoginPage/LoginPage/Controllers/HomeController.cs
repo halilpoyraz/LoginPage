@@ -26,5 +26,40 @@ namespace LoginPage.Controllers
 
             return View();
         }
+
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(Users u)
+        {
+            if (ModelState.IsValid)
+            {
+                using(LoginPageEntities db = new LoginPageEntities())
+                {
+                    var v = db.Users.Where(a => a.UserName.Equals(u.UserName) && a.Password.Equals(u.Password)).FirstOrDefault();
+                    if (v != null)
+                    {
+                        Session["UserID"] = v.Id.ToString();
+                        Session["UserFullName"] = v.FullName.ToString();
+                        return RedirectToAction("AfterLogin");
+                    }
+                }
+            }
+            return View(u);
+        }
+
+        public ActionResult AfterLogin()
+        {
+            if (Session["UserID"] != null)
+            {
+                return View();
+            }
+            else
+                return RedirectToAction("Index");
+        }
     }
 }

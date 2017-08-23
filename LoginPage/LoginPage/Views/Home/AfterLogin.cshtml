@@ -1,0 +1,13 @@
+﻿@model LoginPage.Users
+
+@{
+    ViewBag.Title = "AfterLogin";
+}
+
+<h2>AfterLogin</h2>
+@if(Session["UserFullName"] != null)
+{
+    <text>
+           Hoşgeldin @Session["UserFullName"].ToString()
+    </text>
+}
